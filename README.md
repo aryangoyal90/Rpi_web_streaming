@@ -2,10 +2,10 @@
 
 ### Required Hardware
 - Raspberry Pi (RPI 4 or 5 recommended)
-- Raspberry Pi Camera Module (Official Camera Module 3 recommended)
+- RPi Camera Module 3 or any other camera module
 - GSM Module with 4G SIM (SIM7600 or Ublox Series)
 - MicroSD Card (At least 16GB with Raspberry Pi OS installed)
-
+------------------------------------------------------------------------------
 ### Setting Up Camera
 - After connecting the camera module to RPI's CSI port
 - Enabling the camera in Raspberry Pi OS:
@@ -14,11 +14,11 @@ sudo raspi-config
 ```
 - Go to Interfacing Options → Camera → Enable.
 - Reboot the RPI
-- Testing Camera by below command:
+- Testing Camera by below command(if Rpi Camera):
 ```
 rpicam-hello
 ```
-
+------------------------------------------------------------------------------
 ### Setting up GSM for Internet
 - Connect the GSM module to the Raspberry Pi via USB.
 - Check if the device is recognized:
@@ -37,6 +37,7 @@ sudo nano /etc/wvdial.conf
 Add:
 ```
 #Replace your_apn with your carrier’s APN (e.g., internet for Vodafone).
+# Example: "your_apn" is like "airtelgprs.com" for airtel SIM's
 
 [Dialer myconnection]
 Init1 = ATZ
@@ -50,6 +51,21 @@ Username = " "
 Password = " "
 Stupid Mode = 1
 ```
+AT commands to check APN and if Username pass is required:
+```
+# using minicom to connect to our modem
+sudo minicom -D /dev/ttyUSB0
+
+AT+COPS?     #getting operator name i.e 'Airtel'
+AT+CGDCONT?  #Listing APN
+
+# if no APN appears we can set it manually (OPTIONAL)
+AT+CGDCONT=1,"IP","airtelgprs.com"
+
+# checking if username, Pass are nedded
+AT+CGAUTH?
+```
+
 - Start the connection
 ```
 sudo wvdial myconnection
@@ -87,11 +103,31 @@ http://<your-pi-ip>:8889/cam
 # Replace <your-pi-ip> with your public IP
 ```
 ------------------------------------------------------------------------------
-## Make the Stream Accessible Globally
-Your Raspberry Pi is behind a private IP from the GSM network, so you need a way to expose it to the internet.
+## Video Compression using FFmpeg
+- Integrating FFmpeg with MediaMTX
+```
+ffmpeg -i input.mp4 -c:v libx264 -preset ultrafast -b:v 800k -c:a aac output.mp4
+```
+- Command explanation:
+```
+i input.mp4: Specifies the input video file
+-c:v libx264: Encodes the video using the H.264 codec
+-preset ultrafast: prioritizes speed over compression
+**-b:v 800k: Sets the video bitrate to 800 kbps**
+-c:a aac: Encodes the audio using AAC
+output.mp4: Specifies the output file
+```
 
-#### Using Ngrok(Option 1):
-1. Install Ngrok::
+#### Options for Video compression
+- Use MediaMTX's Built-in Encoding Options
+- **Optimize Resolution and Frame Rate(reducing resolution)**
+- Gstreamer
+------------------------------------------------------------------------------
+## Make the Stream Accessible Globally
+Our Raspberry Pi is behind a private IP from the GSM network, so we need a way to expose it to the internet.
+
+#### Using Ngrok:
+1. Install Ngrok:
 ```
 wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
 unzip ngrok-stable-linux-arm.zip
@@ -111,3 +147,6 @@ ngrok http 8889
 https://abcd1234.ngrok.io/cam
 ```
 this will be our global Url
+
+#### More Options:
+includes Nginx (uses AWS cloud for streaming)
