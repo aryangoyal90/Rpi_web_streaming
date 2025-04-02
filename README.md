@@ -100,6 +100,13 @@ paths:
   cam:
     source: rpiCamera
 ```
+For Integrated webcam
+```
+paths:
+  cam:
+    runOnInit: ffmpeg -f v4l2 -i /dev/video0 -s 320x240 -r 15 -c:v h264 -pix_fmt yuv420p -preset ultrafast -tune zerolatency -b:v 300k -f rtsp rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    runOnInitRestart: yes
+```
 4. Start MediaMTX:
 ```
 mediamtx
@@ -110,6 +117,10 @@ Open a browser and visit:
 http://<your-pi-ip>:8889/cam
 
 # Replace <your-pi-ip> with your public IP
+```
+##### Refrence stackoverflow
+```
+https://stackoverflow.com/questions/78259527/unable-to-stream-video-file-from-mediamtx-media-server-to-browser-via-webrtc
 ```
 ------------------------------------------------------------------------------
 ## Video Compression using FFmpeg
