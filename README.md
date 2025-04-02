@@ -18,6 +18,10 @@ sudo raspi-config
 ```
 rpicam-hello
 ```
+##### Refrence article for setting up Camera
+```
+https://automaticaddison.com/connect-your-built-in-webcam-to-ubuntu-20-04-on-a-virtualbox/
+```
 ------------------------------------------------------------------------------
 ### Setting up GSM for Internet
 - Connect the GSM module to the Raspberry Pi via USB.
