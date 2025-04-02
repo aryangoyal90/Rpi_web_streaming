@@ -72,6 +72,11 @@ sudo wvdial myconnection
 ```
 ------------------------------------------------------------------------------
 ## Install MediaMTX for WebRTC Streaming
+First install AppArmor Utilities
+```
+sudo apt update
+sudo apt install apparmor-utils
+```
 1. Download MediaMTX:
 ```
 wget https://github.com/bluenviron/mediamtx/releases/latest/download/mediamtx_linux_arm64v8.tar.gz
