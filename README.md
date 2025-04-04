@@ -170,3 +170,11 @@ this will be our global Url
 
 #### More Options:
 includes Nginx (uses AWS cloud for streaming)
+
+---------------------------------
+# OpenCV or AI Integration in Streaming
+Motion detection by this article:
+```
+https://pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/
+```
+![Image](https://github.com/user-attachments/assets/d2c9b44e-e249-42d5-8d80-6a64fe67f35d)
